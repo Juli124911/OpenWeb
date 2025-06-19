@@ -378,6 +378,15 @@ input[type='number'] {
         @apply bg-[#f7f7f8] text-gray-900 rounded-lg px-5 py-3 my-2;
 }
 
+/* Basic body styling for ChatGPT themes */
+.chatgpt-dark body {
+        @apply bg-[#343541] text-white;
+}
+
+.chatgpt-light body {
+        @apply bg-white text-gray-900;
+}
+
 /* Code styling */
 .hljs-comment,
 .hljs-quote {

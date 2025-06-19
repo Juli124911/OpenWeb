@@ -189,17 +189,22 @@
 			document.documentElement.style.setProperty('--color-gray-950', '#0d0d0d');
 		}
 
-		themes
-			.filter((e) => e !== themeToApply)
+                themes
+                        .filter((e) => e !== themeToApply && e !== _theme)
 			.forEach((e) => {
 				e.split(' ').forEach((e) => {
 					document.documentElement.classList.remove(e);
 				});
 			});
 
-		themeToApply.split(' ').forEach((e) => {
-			document.documentElement.classList.add(e);
-		});
+               themeToApply.split(' ').forEach((e) => {
+                        document.documentElement.classList.add(e);
+                });
+               if (_theme !== themeToApply) {
+                       _theme.split(' ').forEach((e) => {
+                               document.documentElement.classList.add(e);
+                       });
+               }
 
 		const metaThemeColor = document.querySelector('meta[name="theme-color"]');
 		if (metaThemeColor) {
@@ -228,9 +233,9 @@
 			}
 		}
 
-		if (typeof window !== 'undefined' && window.applyTheme) {
-			window.applyTheme();
-		}
+               if (typeof window !== 'undefined' && window.applyTheme) {
+                       window.applyTheme();
+               }
 
                if (_theme.includes('oled')) {
                        document.documentElement.style.setProperty('--color-gray-800', '#101010');
@@ -243,13 +248,13 @@
                        document.documentElement.style.setProperty('--color-gray-850', '#343541');
                        document.documentElement.style.setProperty('--color-gray-900', '#202123');
                        document.documentElement.style.setProperty('--color-gray-950', '#202123');
-                       document.documentElement.classList.add('dark');
+                       document.documentElement.classList.add('dark', 'chatgpt-dark');
                } else if (_theme === 'chatgpt-light') {
                        document.documentElement.style.setProperty('--color-gray-800', '#ffffff');
                        document.documentElement.style.setProperty('--color-gray-850', '#f7f7f8');
                        document.documentElement.style.setProperty('--color-gray-900', '#f7f7f8');
                        document.documentElement.style.setProperty('--color-gray-950', '#ffffff');
-                       document.documentElement.classList.add('light');
+                       document.documentElement.classList.add('light', 'chatgpt-light');
                }
 
 		console.log(_theme);

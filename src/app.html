@@ -115,14 +115,14 @@
       document.documentElement.style.setProperty('--color-gray-850', '#343541');
       document.documentElement.style.setProperty('--color-gray-900', '#202123');
       document.documentElement.style.setProperty('--color-gray-950', '#202123');
-      document.documentElement.classList.add('dark');
+      document.documentElement.classList.add('dark', 'chatgpt-dark');
       metaThemeColorTag.setAttribute('content', '#202123');
     } else if (theme === 'chatgpt-light') {
       document.documentElement.style.setProperty('--color-gray-800', '#ffffff');
       document.documentElement.style.setProperty('--color-gray-850', '#f7f7f8');
       document.documentElement.style.setProperty('--color-gray-900', '#f7f7f8');
       document.documentElement.style.setProperty('--color-gray-950', '#ffffff');
-      document.documentElement.classList.add('light');
+      document.documentElement.classList.add('light', 'chatgpt-light');
       metaThemeColorTag.setAttribute('content', '#ffffff');
     } else if (theme === 'light') {
       document.documentElement.classList.add('light');
