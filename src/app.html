@@ -99,7 +99,7 @@
   const prefersDarkTheme = window.matchMedia('(prefers-color-scheme: dark)').matches;
 
   const setTheme = (theme) => {
-    document.documentElement.classList.remove('light', 'dark', 'oled-dark', 'her');
+    document.documentElement.classList.remove('light', 'dark', 'oled-dark', 'her', 'chatgpt-dark', 'chatgpt-light');
     if (theme === 'system') {
       document.documentElement.classList.add(prefersDarkTheme ? 'dark' : 'light');
       metaThemeColorTag.setAttribute('content', prefersDarkTheme ? '#171717' : '#ffffff');
@@ -110,6 +110,20 @@
       document.documentElement.style.setProperty('--color-gray-950', '#000000');
       document.documentElement.classList.add('dark');
       metaThemeColorTag.setAttribute('content', '#000000');
+    } else if (theme === 'chatgpt-dark') {
+      document.documentElement.style.setProperty('--color-gray-800', '#444654');
+      document.documentElement.style.setProperty('--color-gray-850', '#343541');
+      document.documentElement.style.setProperty('--color-gray-900', '#202123');
+      document.documentElement.style.setProperty('--color-gray-950', '#202123');
+      document.documentElement.classList.add('dark');
+      metaThemeColorTag.setAttribute('content', '#202123');
+    } else if (theme === 'chatgpt-light') {
+      document.documentElement.style.setProperty('--color-gray-800', '#ffffff');
+      document.documentElement.style.setProperty('--color-gray-850', '#f7f7f8');
+      document.documentElement.style.setProperty('--color-gray-900', '#f7f7f8');
+      document.documentElement.style.setProperty('--color-gray-950', '#ffffff');
+      document.documentElement.classList.add('light');
+      metaThemeColorTag.setAttribute('content', '#ffffff');
     } else if (theme === 'light') {
       document.documentElement.classList.add('light');
       metaThemeColorTag.setAttribute('content', '#ffffff');

@@ -15,7 +15,7 @@
 	export let getModels: Function;
 
 	// General
-	let themes = ['dark', 'light', 'rose-pine dark', 'rose-pine-dawn light', 'oled-dark'];
+       let themes = ['dark', 'chatgpt-dark', 'chatgpt-light', 'light', 'rose-pine dark', 'rose-pine-dawn light', 'oled-dark'];
 	let selectedTheme = 'system';
 
 	let languages: Awaited<ReturnType<typeof getLanguages>> = [];
@@ -161,8 +161,22 @@
 		params.stop = $settings?.params?.stop ? ($settings?.params?.stop ?? []).join(',') : null;
 	});
 
-	const applyTheme = (_theme: string) => {
-		let themeToApply = _theme === 'oled-dark' ? 'dark' : _theme;
+       const applyTheme = (_theme: string) => {
+               let themeToApply = _theme === 'oled-dark' ? 'dark' : _theme;
+
+               if (_theme === 'chatgpt-dark') {
+                       document.documentElement.style.setProperty('--color-gray-800', '#444654');
+                       document.documentElement.style.setProperty('--color-gray-850', '#343541');
+                       document.documentElement.style.setProperty('--color-gray-900', '#202123');
+                       document.documentElement.style.setProperty('--color-gray-950', '#202123');
+                       themeToApply = 'dark';
+               } else if (_theme === 'chatgpt-light') {
+                       document.documentElement.style.setProperty('--color-gray-800', '#ffffff');
+                       document.documentElement.style.setProperty('--color-gray-850', '#f7f7f8');
+                       document.documentElement.style.setProperty('--color-gray-900', '#f7f7f8');
+                       document.documentElement.style.setProperty('--color-gray-950', '#ffffff');
+                       themeToApply = 'light';
+               }
 
 		if (_theme === 'system') {
 			themeToApply = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
@@ -197,16 +211,20 @@
 				metaThemeColor.setAttribute('content', systemTheme === 'light' ? '#ffffff' : '#171717');
 			} else {
 				console.log('Setting meta theme color: ' + _theme);
-				metaThemeColor.setAttribute(
-					'content',
-					_theme === 'dark'
-						? '#171717'
-						: _theme === 'oled-dark'
-							? '#000000'
-							: _theme === 'her'
-								? '#983724'
-								: '#ffffff'
-				);
+                               metaThemeColor.setAttribute(
+                                       'content',
+                                       _theme === 'dark'
+                                               ? '#171717'
+                                               : _theme === 'oled-dark'
+                                                       ? '#000000'
+                                                       : _theme === 'her'
+                                                               ? '#983724'
+                                                               : _theme === 'chatgpt-dark'
+                                                                       ? '#202123'
+                                                                       : _theme === 'chatgpt-light'
+                                                                               ? '#ffffff'
+                                                                               : '#ffffff'
+                               );
 			}
 		}
 
@@ -214,13 +232,25 @@
 			window.applyTheme();
 		}
 
-		if (_theme.includes('oled')) {
-			document.documentElement.style.setProperty('--color-gray-800', '#101010');
-			document.documentElement.style.setProperty('--color-gray-850', '#050505');
-			document.documentElement.style.setProperty('--color-gray-900', '#000000');
-			document.documentElement.style.setProperty('--color-gray-950', '#000000');
-			document.documentElement.classList.add('dark');
-		}
+               if (_theme.includes('oled')) {
+                       document.documentElement.style.setProperty('--color-gray-800', '#101010');
+                       document.documentElement.style.setProperty('--color-gray-850', '#050505');
+                       document.documentElement.style.setProperty('--color-gray-900', '#000000');
+                       document.documentElement.style.setProperty('--color-gray-950', '#000000');
+                       document.documentElement.classList.add('dark');
+               } else if (_theme === 'chatgpt-dark') {
+                       document.documentElement.style.setProperty('--color-gray-800', '#444654');
+                       document.documentElement.style.setProperty('--color-gray-850', '#343541');
+                       document.documentElement.style.setProperty('--color-gray-900', '#202123');
+                       document.documentElement.style.setProperty('--color-gray-950', '#202123');
+                       document.documentElement.classList.add('dark');
+               } else if (_theme === 'chatgpt-light') {
+                       document.documentElement.style.setProperty('--color-gray-800', '#ffffff');
+                       document.documentElement.style.setProperty('--color-gray-850', '#f7f7f8');
+                       document.documentElement.style.setProperty('--color-gray-900', '#f7f7f8');
+                       document.documentElement.style.setProperty('--color-gray-950', '#ffffff');
+                       document.documentElement.classList.add('light');
+               }
 
 		console.log(_theme);
 	};
@@ -247,8 +277,10 @@
 						on:change={() => themeChangeHandler(selectedTheme)}
 					>
 						<option value="system">⚙️ {$i18n.t('System')}</option>
-						<option value="dark">🌑 {$i18n.t('Dark')}</option>
-						<option value="oled-dark">🌃 {$i18n.t('OLED Dark')}</option>
+                                               <option value="dark">🌑 {$i18n.t('Dark')}</option>
+                                               <option value="chatgpt-dark">💬 ChatGPT Dark</option>
+                                               <option value="chatgpt-light">💬 ChatGPT Light</option>
+                                               <option value="oled-dark">🌃 {$i18n.t('OLED Dark')}</option>
 						<option value="light">☀️ {$i18n.t('Light')}</option>
 						<option value="her">🌷 Her</option>
 						<!-- <option value="rose-pine dark">🪻 {$i18n.t('Rosé Pine')}</option>
