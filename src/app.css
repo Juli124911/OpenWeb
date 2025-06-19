@@ -353,12 +353,38 @@ input[type='number'] {
 }
 
 .tiptap p code {
-	color: #eb5757;
-	border-width: 0px;
-	padding: 3px 8px;
-	font-size: 0.8em;
-	font-weight: 600;
-	@apply rounded-md dark:bg-gray-800 bg-gray-100 mx-0.5;
+        color: #eb5757;
+        border-width: 0px;
+        padding: 3px 8px;
+        font-size: 0.8em;
+        font-weight: 600;
+        @apply rounded-md dark:bg-gray-800 bg-gray-100 mx-0.5;
+}
+
+/* ChatGPT theme message bubbles */
+.chatgpt-dark .chat-user {
+        @apply bg-[#343541] text-white rounded-lg px-5 py-3 my-2;
+}
+
+.chatgpt-dark .chat-assistant {
+        @apply bg-[#444654] text-white rounded-lg px-5 py-3 my-2;
+}
+
+.chatgpt-light .chat-user {
+        @apply bg-white text-gray-900 rounded-lg px-5 py-3 my-2;
+}
+
+.chatgpt-light .chat-assistant {
+        @apply bg-[#f7f7f8] text-gray-900 rounded-lg px-5 py-3 my-2;
+}
+
+/* Basic body styling for ChatGPT themes */
+.chatgpt-dark body {
+        @apply bg-[#343541] text-white;
+}
+
+.chatgpt-light body {
+        @apply bg-white text-gray-900;
 }
 
 /* Code styling */

@@ -10,7 +10,10 @@
 	import Suggestions from './Suggestions.svelte';
 	import { sanitizeResponseContent } from '$lib/utils';
 	import Tooltip from '$lib/components/common/Tooltip.svelte';
-	import EyeSlash from '$lib/components/icons/EyeSlash.svelte';
+import EyeSlash from '$lib/components/icons/EyeSlash.svelte';
+import GlobeAlt from '$lib/components/icons/GlobeAlt.svelte';
+import Photo from '$lib/components/icons/Photo.svelte';
+import CommandLine from '$lib/components/icons/CommandLine.svelte';
 
 	const i18n = getContext('i18n');
 
@@ -124,17 +127,32 @@
 			</div>
 		</div>
 
-		<div class=" w-full font-primary" in:fade={{ duration: 200, delay: 300 }}>
-			<Suggestions
-				className="grid grid-cols-2"
-				suggestionPrompts={atSelectedModel?.info?.meta?.suggestion_prompts ??
-					models[selectedModelIdx]?.info?.meta?.suggestion_prompts ??
-					$config?.default_prompt_suggestions ??
-					[]}
-				on:select={(e) => {
-					submitPrompt(e.detail);
-				}}
-			/>
-		</div>
-	</div>
+                <div class=" w-full font-primary" in:fade={{ duration: 200, delay: 300 }}>
+                        <Suggestions
+                                className="grid grid-cols-2"
+                                suggestionPrompts={atSelectedModel?.info?.meta?.suggestion_prompts ??
+                                        models[selectedModelIdx]?.info?.meta?.suggestion_prompts ??
+                                        $config?.default_prompt_suggestions ??
+                                        []}
+                                on:select={(e) => {
+                                        submitPrompt(e.detail);
+                                }}
+                        />
+                </div>
+
+                <div class="mt-4 flex justify-center gap-3" in:fade={{ duration: 200, delay: 350 }}>
+                        <button class="bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-xl flex items-center gap-1 px-3 py-2 text-sm">
+                                <GlobeAlt className="size-5" />
+                                <span>{$i18n.t('Web Search')}</span>
+                        </button>
+                        <button class="bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-xl flex items-center gap-1 px-3 py-2 text-sm">
+                                <Photo className="size-5" />
+                                <span>{$i18n.t('Image')}</span>
+                        </button>
+                        <button class="bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-xl flex items-center gap-1 px-3 py-2 text-sm">
+                                <CommandLine className="size-5" />
+                                <span>{$i18n.t('Code Interpreter')}</span>
+                        </button>
+                </div>
+        </div>
 {/key}
