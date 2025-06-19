@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#171717" />
+    <meta name="description" content="Open WebUI" />
+    <title>Zima AI</title>
+    %sveltekit.head%
+    <style>
+      body, html {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        background: black;
+        color: white;
+        font-family: sans-serif;
+      }
+
+      #initial-splash {
+        position: fixed;
+        inset: 0;
+        z-index: 999999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        text-align: center;
+        animation: fade 2s ease-in-out infinite;
+        transition: opacity 0.5s ease;
+      }
+
+      #initial-splash h1,
+      #initial-splash h2 {
+        margin: 0.5rem 0;
+        text-shadow: 0 0 8px white;
+      }
+
+      #initial-splash h1 {
+        font-size: 2rem;
+        font-weight: 500;
+        opacity: 0.9;
+      }
+
+      #initial-splash h2 {
+        font-size: 3.5rem;
+        font-weight: bold;
+        letter-spacing: 0.1em;
+      }
+
+      #initial-splash img {
+        height: 80px;
+        margin-bottom: 1rem;
+        filter: drop-shadow(0 0 5px white);
+      }
+
+      canvas#particle-canvas {
+        position: fixed;
+        inset: 0;
+        z-index: 999998;
+      }
+
+      @keyframes fade {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.4; }
+      }
+    </style>
+  
+<style>
+  html:not(.splash-active),
+  html:not(.splash-active) body {
+    color: initial !important;
+  }
+</style>
+
+<style>
+  html.splash-active #splash-content h1,
+  html.splash-active #splash-content h2 {
+    visibility: hidden;
+  }
+
+  html.ready #splash-content h1,
+  html.ready #splash-content h2 {
+    visibility: visible;
+    animation: letterIn 0.6s ease-out forwards;
+  }
+</style>
+
+<script>
+  window.addEventListener("DOMContentLoaded", () => {
+    document.documentElement.classList.add("ready");
+  });
+</script>
+
+
+<script>
+(() => {
+  const metaThemeColorTag = document.querySelector('meta[name="theme-color"]');
+  const prefersDarkTheme = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+  const setTheme = (theme) => {
+    document.documentElement.classList.remove('light', 'dark', 'oled-dark', 'her');
+    if (theme === 'system') {
+      document.documentElement.classList.add(prefersDarkTheme ? 'dark' : 'light');
+      metaThemeColorTag.setAttribute('content', prefersDarkTheme ? '#171717' : '#ffffff');
+    } else if (theme === 'oled-dark') {
+      document.documentElement.style.setProperty('--color-gray-800', '#101010');
+      document.documentElement.style.setProperty('--color-gray-850', '#050505');
+      document.documentElement.style.setProperty('--color-gray-900', '#000000');
+      document.documentElement.style.setProperty('--color-gray-950', '#000000');
+      document.documentElement.classList.add('dark');
+      metaThemeColorTag.setAttribute('content', '#000000');
+    } else if (theme === 'light') {
+      document.documentElement.classList.add('light');
+      metaThemeColorTag.setAttribute('content', '#ffffff');
+    } else if (theme === 'her') {
+      document.documentElement.classList.add('dark', 'her');
+      metaThemeColorTag.setAttribute('content', '#983724');
+    } else {
+      document.documentElement.classList.add('dark');
+      metaThemeColorTag.setAttribute('content', '#171717');
+    }
+  };
+
+  try {
+    const theme = localStorage.getItem('theme') || 'system';
+    setTheme(theme);
+  } catch (e) {
+    setTheme('system');
+  }
+
+  // Live wechseln wenn OS wechselt
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+    const theme = localStorage.getItem('theme') || 'system';
+    if (theme === 'system') {
+      document.documentElement.classList.toggle('dark', e.matches);
+      document.documentElement.classList.toggle('light', !e.matches);
+      metaThemeColorTag.setAttribute('content', e.matches ? '#171717' : '#ffffff');
+    }
+  });
+})();
+</script>
+
+</head>
+
+  <body class="splash-active" style="visibility: visible !important;">
+    <canvas id="particle-canvas"></canvas>
+    <div id="initial-splash">
+      <img src="/static/zimaai.png" alt="Zima AI Logo" />
+      <h1>Zima AI</h1>
+      <h2>Be The Future</h2>
+    </div>
+    <div style="display: contents">%sveltekit.body%</div>
+
+    <script>
+      window.addEventListener('DOMContentLoaded', () => {
+    setTimeout(() => {
+      const splash = document.getElementById('initial-splash');
+      const canvas = document.getElementById('particle-canvas');
+
+      if (splash) {
+        splash.style.transition = 'opacity 0.5s ease';
+        splash.style.opacity = '0';
+        splash.style.pointerEvents = 'none';
+        setTimeout(() => splash.remove(), 600);
+      }
+
+      if (canvas) {
+        canvas.style.transition = 'opacity 0.5s ease';
+        canvas.style.opacity = '0';
+        canvas.style.pointerEvents = 'none';
+        setTimeout(() => canvas.remove(), 600);
+      }
+    }, 1000);
+
+        setTimeout(() => {
+          const splash = document.getElementById('initial-splash');
+          if (splash) {
+            splash.style.opacity = '0';
+            splash.style.pointerEvents = 'none';
+            setTimeout(() => splash.remove(), 500);
+          }
+        }, 1000);
+      });
+
+      const canvas = document.getElementById('particle-canvas');
+      const ctx = canvas.getContext('2d');
+      let width, height;
+      let particles = [];
+
+      function resize() {
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
+      }
+
+      function initParticles(num) {
+        particles = [];
+        for (let i = 0; i < num; i++) {
+          particles.push({
+            x: Math.random() * width,
+            y: Math.random() * height,
+            vx: (Math.random() - 0.5) * 0.5,
+            vy: (Math.random() - 0.5) * 0.5
+          });
+        }
+      }
+
+      function connectParticles() {
+        let maxDist = 120;
+        for (let i = 0; i < particles.length; i++) {
+          for (let j = i + 1; j < particles.length; j++) {
+            let dx = particles[i].x - particles[j].x;
+            let dy = particles[i].y - particles[j].y;
+            let dist = dx * dx + dy * dy;
+            if (dist < maxDist * maxDist) {
+              ctx.strokeStyle = 'rgba(255,255,255,0.05)';
+              ctx.lineWidth = 1;
+              ctx.beginPath();
+              ctx.moveTo(particles[i].x, particles[i].y);
+              ctx.lineTo(particles[j].x, particles[j].y);
+              ctx.stroke();
+            }
+          }
+        }
+      }
+
+      function animate() {
+        ctx.clearRect(0, 0, width, height);
+        for (let p of particles) {
+          p.x += p.vx;
+          p.y += p.vy;
+          if (p.x < 0 || p.x > width) p.vx *= -1;
+          if (p.y < 0 || p.y > height) p.vy *= -1;
+        }
+        connectParticles();
+        requestAnimationFrame(animate);
+      }
+
+      resize();
+      initParticles(75);
+      animate();
+      window.addEventListener('resize', () => {
+        resize();
+        initParticles(75);
+      });
+    </script>
+  </body>
+</html>
